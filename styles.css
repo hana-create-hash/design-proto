@@ -15,7 +15,7 @@
   --shadow: 0 30px 70px rgba(40, 18, 74, 0.26);
   --hard-shadow: 7px 8px 0 rgba(50, 16, 57, 0.18);
   --radius: 28px;
-  --font: "Yu Gothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+  --font: "Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", "Yu Gothic", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
 }
 
 * {
@@ -74,13 +74,101 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 16px 8px 8px;
+  padding: 8px 18px 8px 8px;
   color: #fff;
-  background: rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 89, 197, 0.22)),
+    rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(16px);
-  font-size: 18px;
   font-weight: 950;
   text-shadow: 0 2px 12px rgba(255, 116, 200, 0.8);
+}
+
+.brand-logo {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  color: #fff;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow:
+    0 2px 0 #321039,
+    0 0 14px rgba(255, 116, 200, 0.92),
+    0 0 28px rgba(141, 92, 255, 0.62);
+}
+
+.brand-logo::after {
+  content: "";
+  position: absolute;
+  right: -16px;
+  top: -6px;
+  width: 13px;
+  height: 13px;
+  background: linear-gradient(135deg, #fff, #ffe06d);
+  clip-path: polygon(50% 0, 62% 36%, 100% 50%, 62% 64%, 50% 100%, 38% 64%, 0 50%, 38% 36%);
+  filter: drop-shadow(0 0 8px rgba(255, 239, 113, 0.8));
+}
+
+.logo-m,
+.logo-e {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-m {
+  color: #ffd8f2;
+}
+
+.logo-m::before,
+.logo-m::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  width: 10px;
+  height: 12px;
+  border-radius: 80% 20% 70% 30%;
+  background: linear-gradient(135deg, #ff6bd0, #321039);
+  box-shadow: 0 0 8px rgba(255, 116, 200, 0.88);
+}
+
+.logo-m::before {
+  left: 2px;
+  transform: rotate(-20deg);
+}
+
+.logo-m::after {
+  right: 1px;
+  transform: rotate(20deg) scaleX(-1);
+}
+
+.logo-e-one::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  background: #ff7acb;
+  transform: rotate(-35deg);
+  clip-path: polygon(50% 100%, 10% 58%, 0 32%, 18% 8%, 38% 8%, 50% 25%, 62% 8%, 82% 8%, 100% 32%, 90% 58%);
+  filter: drop-shadow(0 0 6px rgba(255, 116, 200, 0.9));
+}
+
+.logo-e-two::after {
+  content: "";
+  position: absolute;
+  right: -12px;
+  bottom: -6px;
+  width: 20px;
+  height: 18px;
+  border-right: 4px solid #ff7acb;
+  border-bottom: 4px solid #ff7acb;
+  border-radius: 0 0 18px 0;
+  transform: rotate(-24deg);
+  filter: drop-shadow(0 0 6px rgba(255, 116, 200, 0.9));
 }
 
 .brand-character {
@@ -196,10 +284,10 @@ main {
 .speech-bubble {
   position: absolute;
   z-index: 10;
-  width: min(470px, calc(100% - 64px));
-  padding: 20px 22px;
+  width: min(410px, calc(100% - 64px));
+  padding: 15px 17px;
   border: 2px solid rgba(255, 255, 255, 0.58);
-  border-radius: var(--radius);
+  border-radius: 34px 38px 36px 32px;
   background: var(--glass);
   backdrop-filter: blur(18px) saturate(1.18);
   box-shadow: var(--hard-shadow), 0 18px 44px rgba(75, 21, 93, 0.22);
@@ -210,11 +298,11 @@ main {
   position: absolute;
   bottom: -13px;
   left: 52%;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-right: 2px solid rgba(255, 255, 255, 0.58);
   border-bottom: 2px solid rgba(255, 255, 255, 0.58);
-  border-radius: 0 0 9px 0;
+  border-radius: 0 0 13px 0;
   background: var(--glass);
   transform: rotate(45deg);
 }
@@ -235,13 +323,13 @@ main {
 
 .speech-bubble p {
   display: inline-block;
-  margin: 0 0 10px;
-  padding: 5px 10px;
+  margin: 0 0 8px;
+  padding: 4px 9px;
   border-radius: 999px;
   color: #fff;
   background: linear-gradient(135deg, var(--hot-pink), var(--purple));
   box-shadow: 0 0 18px rgba(255, 116, 200, 0.6);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 950;
 }
 
@@ -255,20 +343,20 @@ main {
 }
 
 .speech-bubble h1 {
-  font-size: clamp(32px, 4.6vw, 52px);
+  font-size: clamp(25px, 3.6vw, 40px);
   font-weight: 950;
 }
 
 .speech-bubble h2 {
-  font-size: clamp(28px, 3.8vw, 42px);
+  font-size: clamp(22px, 3.2vw, 34px);
   font-weight: 950;
 }
 
 .speech-bubble span {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 850;
-  line-height: 1.65;
+  line-height: 1.55;
 }
 
 .sensor-status {
@@ -276,12 +364,12 @@ main {
   width: fit-content;
   max-width: 100%;
   margin: 12px 0 0;
-  padding: 7px 11px;
+  padding: 6px 10px;
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 999px;
   color: var(--violet);
   background: rgba(255, 255, 255, 0.68);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 950;
   line-height: 1.45;
 }
@@ -335,8 +423,8 @@ main {
 .character {
   position: absolute;
   z-index: 7;
-  width: clamp(250px, 30vw, 355px);
-  height: clamp(322px, 39vw, 456px);
+  width: clamp(220px, 27vw, 315px);
+  height: clamp(284px, 35vw, 405px);
   filter: drop-shadow(0 24px 24px rgba(74, 18, 86, 0.32));
 }
 
@@ -385,6 +473,126 @@ main {
   animation-delay: 0.8s;
 }
 
+.mood-face {
+  position: absolute;
+  left: 50%;
+  top: 24%;
+  z-index: 3;
+  width: clamp(48px, 5.2vw, 66px);
+  height: clamp(38px, 4.2vw, 52px);
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  border-radius: 45% 55% 52% 48%;
+  background: rgba(255, 245, 255, 0.34);
+  box-shadow: 0 0 18px rgba(255, 116, 200, 0.48);
+  transform: translateX(-50%) rotate(-4deg);
+  backdrop-filter: blur(1px);
+  pointer-events: none;
+}
+
+.mood-face::before,
+.mood-face::after {
+  content: "";
+  position: absolute;
+}
+
+.mood-face::before {
+  left: 11px;
+  right: 11px;
+  top: 13px;
+  height: 10px;
+  background:
+    radial-gradient(circle at 8px 50%, #321039 0 5px, transparent 6px),
+    radial-gradient(circle at calc(100% - 8px) 50%, #321039 0 5px, transparent 6px);
+}
+
+.mood-face::after {
+  left: 50%;
+  bottom: 10px;
+  width: 24px;
+  height: 12px;
+  border-bottom: 4px solid #321039;
+  border-radius: 0 0 24px 24px;
+  transform: translateX(-50%);
+}
+
+.character-large.is-happy .mood-face,
+.character-large.is-fun .mood-face {
+  background: rgba(255, 238, 251, 0.52);
+  transform: translateX(-50%) rotate(5deg) scale(1.05);
+}
+
+.character-large.is-happy .mood-face::before,
+.character-large.is-fun .mood-face::before {
+  background:
+    radial-gradient(circle at 8px 50%, #321039 0 5px, transparent 6px),
+    radial-gradient(circle at calc(100% - 8px) 50%, #321039 0 5px, transparent 6px),
+    radial-gradient(circle at 50% 0, #ff54bd 0 4px, transparent 5px);
+}
+
+.character-large.is-curious .mood-face::after {
+  bottom: 8px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #321039;
+  border-radius: 50%;
+}
+
+.character-large.is-restless .mood-face,
+.character-large.is-pouty .mood-face {
+  transform: translateX(-50%) rotate(-8deg);
+}
+
+.character-large.is-restless .mood-face::before,
+.character-large.is-pouty .mood-face::before {
+  top: 12px;
+  background:
+    radial-gradient(circle at 8px 50%, #321039 0 5px, transparent 6px),
+    radial-gradient(circle at calc(100% - 8px) 50%, #321039 0 5px, transparent 6px),
+    linear-gradient(158deg, transparent 0 22%, #321039 23% 28%, transparent 29% 100%),
+    linear-gradient(22deg, transparent 0 72%, #321039 73% 78%, transparent 79% 100%);
+}
+
+.character-large.is-restless .mood-face::after,
+.character-large.is-pouty .mood-face::after {
+  bottom: 12px;
+  width: 18px;
+  height: 5px;
+  border: 0;
+  border-radius: 999px;
+  background: #321039;
+}
+
+.character-large.is-sad .mood-face {
+  background: rgba(224, 226, 255, 0.44);
+  transform: translateX(-50%) rotate(4deg);
+}
+
+.character-large.is-sad .mood-face::before {
+  top: 13px;
+  background:
+    radial-gradient(circle at 8px 50%, #321039 0 5px, transparent 6px),
+    radial-gradient(circle at calc(100% - 8px) 50%, #321039 0 5px, transparent 6px),
+    radial-gradient(ellipse at 17px 18px, #8ceaff 0 4px, transparent 5px);
+}
+
+.character-large.is-sad .mood-face::after,
+.character-large.is-sleepy .mood-face::after {
+  bottom: 8px;
+  width: 24px;
+  height: 12px;
+  border: 0;
+  border-top: 4px solid #321039;
+  border-radius: 24px 24px 0 0;
+}
+
+.character-large.is-sleepy .mood-face::before {
+  top: 15px;
+  height: 7px;
+  background:
+    linear-gradient(10deg, transparent 0 18%, #321039 19% 33%, transparent 34% 100%) left center / 18px 7px no-repeat,
+    linear-gradient(-10deg, transparent 0 18%, #321039 19% 33%, transparent 34% 100%) right center / 18px 7px no-repeat;
+}
+
 .character-large {
   --char-x: 0;
   right: 8%;
@@ -411,6 +619,31 @@ main {
 .character-large.is-sleepy {
   opacity: 0.88;
   transform: translateX(var(--char-x)) rotate(2deg);
+}
+
+.character-large.is-sad {
+  opacity: 0.9;
+  transform: translateX(var(--char-x)) translateY(6px) rotate(-2deg);
+}
+
+.character-large.is-pouty {
+  transform: translateX(var(--char-x)) rotate(-3deg);
+}
+
+.character-large.is-fun {
+  animation: characterBounce 0.9s ease-in-out infinite;
+}
+
+.character.is-pulsing {
+  animation: vibrationPulse 520ms ease;
+}
+
+body.is-vibrating .signal-ring {
+  filter: drop-shadow(0 0 22px rgba(255, 116, 200, 0.9));
+}
+
+body.is-vibrating .signal-ring span {
+  animation-duration: 0.55s;
 }
 
 .signal-ring {
@@ -701,6 +934,10 @@ button:focus-visible {
     transform: translateY(-4px);
     filter: saturate(1.08);
   }
+
+  .brand-button:hover .brand-logo {
+    animation: logoWobble 520ms ease;
+  }
 }
 
 @keyframes blobFloat {
@@ -747,9 +984,43 @@ button:focus-visible {
   }
 }
 
+@keyframes vibrationPulse {
+  0%,
+  100% {
+    transform: translateX(var(--char-x)) scale(1);
+  }
+
+  22% {
+    transform: translateX(var(--char-x)) translate(-3px, -5px) rotate(-2deg) scale(1.04);
+  }
+
+  46% {
+    transform: translateX(var(--char-x)) translate(4px, -2px) rotate(2deg) scale(1.03);
+  }
+
+  72% {
+    transform: translateX(var(--char-x)) translate(-2px, -4px) rotate(-1deg) scale(1.02);
+  }
+}
+
 @keyframes signalFloat {
   50% {
     transform: translateY(-8px) scale(1.08);
+  }
+}
+
+@keyframes logoWobble {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(1.06, 0.94) rotate(-1deg);
+  }
+
+  70% {
+    transform: scale(0.98, 1.04) rotate(1deg);
   }
 }
 
@@ -778,6 +1049,10 @@ button:focus-visible {
   .brand-button,
   .test-button {
     width: fit-content;
+  }
+
+  .brand-logo {
+    font-size: 24px;
   }
 
   main {
@@ -815,8 +1090,8 @@ button:focus-visible {
 
   .speech-bubble {
     width: calc(100% - 34px);
-    padding: 17px;
-    border-radius: 24px;
+    padding: 14px;
+    border-radius: 30px 34px 32px 29px;
   }
 
   .main-bubble,
@@ -827,20 +1102,20 @@ button:focus-visible {
   }
 
   .speech-bubble h1 {
-    font-size: clamp(28px, 9vw, 39px);
+    font-size: clamp(22px, 7.3vw, 31px);
   }
 
   .speech-bubble h2 {
-    font-size: clamp(25px, 8vw, 34px);
+    font-size: clamp(20px, 6.8vw, 29px);
   }
 
   .speech-bubble span {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .character {
-    width: 234px;
-    height: 300px;
+    width: 206px;
+    height: 265px;
   }
 
   .character-large {

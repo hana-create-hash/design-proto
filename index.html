@@ -3,15 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>小悪魔のわがまま時間</title>
+    <title>WagaMee</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <button class="brand-button" type="button" data-screen-target="home" aria-label="小悪魔の部屋へ戻る">
+        <button class="brand-button" type="button" data-screen-target="home" aria-label="WagaMeeの部屋へ戻る">
           <span class="brand-character" aria-hidden="true"></span>
-          <span>小悪魔のわがまま時間</span>
+          <span class="brand-logo" aria-label="WagaMee">
+            <span>Waga</span><span class="logo-m">M</span><span class="logo-e logo-e-one">e</span><span class="logo-e logo-e-two">e</span>
+          </span>
         </button>
         <button class="test-button" type="button" id="notify-test-button">通知を試す</button>
       </header>
@@ -39,8 +41,9 @@
               <span>今日は、この子のせいにして少しだけわがままになる。</span>
             </div>
 
-            <div class="character character-large is-looking" aria-label="ピンクの小悪魔キャラクター" role="img">
+            <div class="character character-large is-looking" id="home-character" aria-label="ピンクの小悪魔キャラクター" role="img">
               <span class="aura"></span>
+              <span class="mood-face" aria-hidden="true"></span>
               <span class="sparkle sparkle-one"></span>
               <span class="sparkle sparkle-two"></span>
               <span class="sparkle sparkle-three"></span>
@@ -63,8 +66,9 @@
               <span>立ち止まったら、スマホをゆっくり向けてみて。</span>
             </div>
 
-            <div class="character character-large is-restless" aria-hidden="true">
+            <div class="character character-large is-restless" id="start-character" aria-hidden="true">
               <span class="aura"></span>
+              <span class="mood-face" aria-hidden="true"></span>
               <span class="sparkle sparkle-one"></span>
               <span class="sparkle sparkle-two"></span>
               <span class="sparkle sparkle-three"></span>
@@ -97,6 +101,7 @@
 
             <div class="character character-large is-curious" id="sniff-character" aria-hidden="true">
               <span class="aura"></span>
+              <span class="mood-face" aria-hidden="true"></span>
               <span class="sparkle sparkle-one"></span>
               <span class="sparkle sparkle-two"></span>
               <span class="sparkle sparkle-three"></span>
@@ -129,8 +134,9 @@
               <span id="finish-copy">前まで行けただけでも、ちゃんと自分の時間。</span>
             </div>
 
-            <div class="character character-large is-happy" aria-hidden="true">
+            <div class="character character-large is-happy" id="finish-character" aria-hidden="true">
               <span class="aura"></span>
+              <span class="mood-face" aria-hidden="true"></span>
               <span class="sparkle sparkle-one"></span>
               <span class="sparkle sparkle-two"></span>
               <span class="sparkle sparkle-three"></span>
