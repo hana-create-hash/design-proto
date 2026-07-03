@@ -57,17 +57,6 @@ const notificationTexts = [
   "小悪魔がそわそわしています"
 ];
 
-const moodClasses = [
-  "is-looking",
-  "is-restless",
-  "is-curious",
-  "is-happy",
-  "is-sleepy",
-  "is-sad",
-  "is-pouty",
-  "is-fun"
-];
-
 const storageKey = "devil-detour-wish-v1";
 const roomMemoryKey = "devil-detour-room-memory-v1";
 
@@ -90,10 +79,7 @@ const els = {
   sniffMessage: document.querySelector("#sniff-message"),
   sniffSub: document.querySelector("#sniff-sub"),
   sensorStatus: document.querySelector("#sensor-status"),
-  homeCharacter: document.querySelector("#home-character"),
-  startCharacter: document.querySelector("#start-character"),
   sniffCharacter: document.querySelector("#sniff-character"),
-  finishCharacter: document.querySelector("#finish-character"),
   followButton: document.querySelector("#follow-button"),
   homeSkipButton: document.querySelector("#home-skip-button"),
   beginDetourButton: document.querySelector("#begin-detour-button"),
@@ -111,11 +97,11 @@ initialize();
 function initialize() {
   document.addEventListener("click", handleScreenTargetClick);
   els.followButton.addEventListener("click", openStart);
-  els.homeSkipButton.addEventListener("click", () => finish("部屋にいる日も、小悪魔はとなりにいます。", false, "sleepy"));
+  els.homeSkipButton.addEventListener("click", () => finish("部屋にいる日も、小悪魔はとなりにいます。"));
   els.beginDetourButton.addEventListener("click", beginDetour);
-  els.startSkipButton.addEventListener("click", () => finish("また今度でいいよ。", false, "sad"));
+  els.startSkipButton.addEventListener("click", () => finish("また今度でいいよ。"));
   els.sniffButton.addEventListener("click", handleSignalButton);
-  els.quitButton.addEventListener("click", () => finish("今日はここまでで大丈夫。帰りたくなったら帰るのも、わがままだよ。", true, "pouty"));
+  els.quitButton.addEventListener("click", () => finish("今日はここまでで大丈夫。帰りたくなったら帰るのも、わがままだよ。", true));
   els.notifyTestButton.addEventListener("click", sendTestNotification);
   renderWish();
   renderRoomMemory();
@@ -137,8 +123,6 @@ function showScreen(name) {
 function renderWish() {
   els.homeWish.textContent = state.wish.text;
   els.startWish.textContent = state.wish.text;
-  setCharacterMood(els.homeCharacter, moodForWish(state.wish.kind));
-  setCharacterMood(els.startCharacter, "restless");
 }
 
 function openStart() {
@@ -151,16 +135,15 @@ async function beginDetour() {
   state.hasHeading = false;
   state.lastVibrateAt = 0;
   els.sniffButton.textContent = "振動を試す";
-  state.vibrationSupported = vibrate(18, { force: true, warmup: true, visual: false }) || state.vibrationSupported;
   setSignalMood("curious", "このへん、気になるみたい", "振動したら、スマホを少し下げて周りを見てみて。");
-  setSensorStatus(state.vibrationSupported ? "立ち止まって、スマホをゆっくり向けてみて。" : "振動に対応したスマホでは、近い向きでブルッとします。");
+  setSensorStatus(state.vibrationSupported ? "向きが合うと、スマホ本体がブルッと震えます。" : "対応スマホで開くと、向きが合った時に本体が震えます。");
   showScreen("sniff");
   await startOrientationIfPossible();
 }
 
 function handleSignalButton() {
   if (state.signFound) {
-    finish(state.wish.finish, true, "fun");
+    finish(state.wish.finish, true);
     return;
   }
   simulateSignal();
@@ -213,9 +196,9 @@ function checkSignalDirection(heading, fromSensor = false) {
 
   if (diff < 35) {
     state.signFound = true;
-    const didVibrate = vibrate([160, 55, 180], { force: true });
-    setSignalMood("fun", pickNearbyReaction(), "画面より、周りを見てみよう。行ってもいいし、やめてもいい。");
-    setSensorStatus(didVibrate ? "今、スマホがブルッとしました。" : "画面がぷるっとしたら、小悪魔サインです。");
+    const didVibrate = vibrate([180, 60, 180], { force: true });
+    setSignalMood("happy", pickNearbyReaction(), "スマホが震えた方向を、少し見てみよう。行ってもいいし、やめてもいい。");
+    setSensorStatus(didVibrate ? "今、スマホ本体がブルッとしました。" : "対応スマホでは、ここで本体がブルッと震えます。");
     els.sniffButton.textContent = "少し見てみる";
     return;
   }
@@ -227,8 +210,7 @@ function checkSignalDirection(heading, fromSensor = false) {
     return;
   }
 
-  const isSleepy = Math.random() > 0.5;
-  setSignalMood(isSleepy ? "sleepy" : "pouty", isSleepy ? "まだ違うみたい" : "きょろきょろしてる", "違ったら、立ち止まって向きを変えてみて。");
+  setSignalMood("sleepy", Math.random() > 0.5 ? "まだ違うみたい" : "きょろきょろしてる", "違ったら、立ち止まって向きを変えてみて。");
   setSensorStatus(fromSensor ? "まだ違うみたい。ゆっくり向きを変えてみて。" : "スマホを向けると、近い方向で震えます。");
   els.sniffButton.textContent = fromSensor ? "振動を試す" : "もう一度サインを試す";
 }
@@ -247,38 +229,19 @@ function pickNearbyReaction() {
 }
 
 function setSignalMood(mood, message, sub) {
-  setCharacterMood(els.sniffCharacter, mood);
+  els.sniffCharacter.classList.remove("is-curious", "is-happy", "is-sleepy");
+  els.sniffCharacter.classList.add(`is-${mood}`);
   els.sniffMessage.textContent = message;
   els.sniffSub.textContent = sub;
-}
-
-function setCharacterMood(character, mood) {
-  if (!character) return;
-  character.classList.remove(...moodClasses);
-  character.classList.add(`is-${mood}`);
-}
-
-function moodForWish(kind) {
-  const moods = {
-    cafe: "fun",
-    sweet: "happy",
-    food: "happy",
-    shop: "pouty",
-    view: "curious",
-    rest: "sleepy",
-    detour: "restless"
-  };
-  return moods[kind] || "looking";
 }
 
 function setSensorStatus(message) {
   if (els.sensorStatus) els.sensorStatus.textContent = message;
 }
 
-function finish(copy, shouldLeaveTrace = false, mood = "happy") {
+function finish(copy, shouldLeaveTrace = false) {
   stopOrientation();
   if (shouldLeaveTrace) rememberDetour(state.wish.kind);
-  setCharacterMood(els.finishCharacter, mood);
   els.finishTitle.textContent = "今日はこれで十分";
   els.finishCopy.textContent = copy || "前まで行けただけでも、ちゃんと自分の時間。";
   renderRoomMemory();
@@ -308,7 +271,7 @@ function pickMotif(kind) {
     sweet: "sweet",
     food: "sweet",
     shop: "ticket",
-    view: "flower",
+    view: "light",
     rest: "cushion",
     detour: "ticket"
   };
@@ -381,9 +344,8 @@ function pick(items) {
 
 function vibrate(pattern, options = {}) {
   const now = Date.now();
-  const { force = false, warmup = false, visual = true } = options;
-  if (!force && !warmup && now - state.lastVibrateAt < 1200) return false;
-  if (visual) playVibrationFeedback();
+  const { force = false } = options;
+  if (!force && now - state.lastVibrateAt < 1200) return false;
 
   if (typeof navigator.vibrate !== "function") return false;
 
@@ -394,18 +356,8 @@ function vibrate(pattern, options = {}) {
     didVibrate = false;
   }
 
-  if (!warmup) state.lastVibrateAt = now;
+  state.lastVibrateAt = now;
   return didVibrate;
-}
-
-function playVibrationFeedback() {
-  document.body.classList.add("is-vibrating");
-  els.sniffCharacter?.classList.add("is-pulsing");
-  window.clearTimeout(playVibrationFeedback.timer);
-  playVibrationFeedback.timer = window.setTimeout(() => {
-    document.body.classList.remove("is-vibrating");
-    els.sniffCharacter?.classList.remove("is-pulsing");
-  }, 520);
 }
 
 function readJson(key, fallback) {
