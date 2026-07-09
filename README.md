@@ -1,32 +1,34 @@
-# この子の寄り道
+# WagaMee
 
-「今日は、この子に誘われて寄り道する。」を試すためのWebプロトタイプです。
+小悪魔のわがままを口実に、自分のための寄り道へ出るWebアプリのプロトタイプです。
 
-## 今の構成
+## ローカルで開く方法
 
-- 通知が来た想定の部屋
-- 犬の今日のわがまま
-- くんくんサイン
-- 軽く終わる画面
-
-## 開き方
-
-このフォルダの `index.html` をダブルクリックします。
-
-URLで開く場合は、PowerShellでこのフォルダを開いて次を貼ります。
+PowerShellでこのフォルダを開いて、次を実行します。
 
 ```powershell
-& "$env:USERPROFILE\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 5500 --bind 127.0.0.1
+& "$env:USERPROFILE\.cache\codex-runtimes\codex-primary-runtime\dependencies\bin\pnpm.cmd" dev
 ```
 
-そのあと、ブラウザで開きます。
+ブラウザで次を開きます。
 
 ```text
-http://127.0.0.1:5500/
+http://127.0.0.1:5511/
 ```
 
-## メモ
+## Vercelで公開する方法
 
-- 地図、SNS、入力中心のアプリ、育成ゲームではありません。
-- 振動は、対応しているスマホでアプリを開いているときだけ動きます。
-- 本物の「閉じていても届く1日1回通知」は、次の段階でPWA化やスマホアプリ化が必要です。
+1. このリポジトリをGitHubにPushします。
+2. Vercelで「Add New Project」を選びます。
+3. GitHubの `design-proto` リポジトリを選びます。
+4. Framework Preset が `Next.js` になっていることを確認します。
+5. そのままDeployします。
+
+## 入っているもの
+
+- Next.js版のWagaMee本体
+- PWA用の `manifest.webmanifest`
+- オフライン用の基本 `sw.js`
+- スマホの向きと振動を使った小悪魔サイン
+
+スマホ本体の振動は、対応しているAndroidブラウザなどで動きます。iPhone SafariではWebページから本体バイブレーションを鳴らせない場合があります。

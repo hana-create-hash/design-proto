@@ -1,0 +1,19 @@
+{
+  "name": "WagaMee",
+  "short_name": "WagaMee",
+  "description": "小悪魔のわがままを口実に、自分のための寄り道へ出るアプリ。",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#191219",
+  "theme_color": "#ff5fbd",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

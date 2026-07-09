@@ -1,3 +1,11 @@
 AGENTS.md
 .agents/
 previous-app/
+assets/
+puppy-character.html
+node_modules/
+.pnpm-store/
+.next/
+out/
+.vercel/
+*.log
