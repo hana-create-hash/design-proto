@@ -381,6 +381,19 @@ function Character({ mood, type, id, ariaLabel }) {
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
 
+  const isLocalPreview = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  if (isLocalPreview) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => registration.unregister());
+    });
+    if ("caches" in window) {
+      caches.keys().then((keys) => {
+        keys.filter((key) => key.startsWith("wagamee-")).forEach((key) => caches.delete(key));
+      });
+    }
+    return;
+  }
+
   const register = () => {
     navigator.serviceWorker.register(`${basePath}/sw.js`).catch(() => {});
   };

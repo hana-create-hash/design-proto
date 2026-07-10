@@ -1,6 +1,5 @@
-const CACHE_NAME = "wagamee-pwa-v1";
-const APP_SHELL = [
-  "./",
+const CACHE_NAME = "wagamee-pwa-v2";
+const STATIC_ASSETS = [
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./assets/wagamee-logo-new.png",
@@ -15,7 +14,7 @@ const APP_SHELL = [
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)));
   self.skipWaiting();
 });
 
@@ -31,6 +30,13 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  const url = new URL(event.request.url);
+  const isStaticAsset =
+    url.origin === self.location.origin &&
+    (url.pathname.includes("/assets/") || url.pathname.includes("/icons/") || url.pathname.endsWith("/manifest.webmanifest"));
+
+  if (!isStaticAsset) return;
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
@@ -41,7 +47,7 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
           return response;
         })
-        .catch(() => caches.match("./"));
+        .catch(() => cached || Response.error());
     })
   );
 });
