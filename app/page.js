@@ -1,6 +1,19 @@
 "use client";
 
+import { initializeApp, getApps } from "firebase/app";
+import { getMessaging, getToken, isSupported, onMessage } from "firebase/messaging";
 import { useEffect, useRef, useState } from "react";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCGAfHdsBIJWZzaWBlvYu4hGUamPgS854I",
+  authDomain: "designe-hana.firebaseapp.com",
+  projectId: "designe-hana",
+  storageBucket: "designe-hana.firebasestorage.app",
+  messagingSenderId: "851897207048",
+  appId: "1:851897207048:web:5cbd5b01b8f59c4f79c4bd"
+};
+
+const firebaseVapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY || "";
 
 const wishes = [
   {
@@ -93,6 +106,7 @@ export default function Home() {
   const [sniffButtonText, setSniffButtonText] = useState("Try Vibe");
   const [finishTitle, setFinishTitle] = useState("今日はこれで十分!");
   const [finishCopy, setFinishCopy] = useState("前まで行けただけでも、ちゃんと自分の時間。");
+  const [pushStatus, setPushStatus] = useState("Firebase通知はVAPID key設定後に使えます。");
   const [toast, setToast] = useState("");
 
   const targetAngleRef = useRef(0);
@@ -104,6 +118,7 @@ export default function Home() {
   useEffect(() => {
     setWish(loadTodayWish());
     registerServiceWorker();
+    listenForForegroundMessages(showToast);
 
     return () => {
       stopOrientation();
@@ -224,10 +239,27 @@ export default function Home() {
       return;
     }
 
-    new Notification(pick(notificationTexts), {
-      body: "開くまで、今日のわがままは内緒です。"
-    });
-    showToast("通知を出しました。");
+    if (!firebaseVapidKey) {
+      new Notification(pick(notificationTexts), {
+        body: "Firebase通知にはVAPID keyの設定が必要です。"
+      });
+      setPushStatus("通知許可はOK。次にVAPID keyをVercelへ設定してください。");
+      showToast("通知許可はOK。VAPID keyが未設定です。");
+      return;
+    }
+
+    const token = await requestFirebaseToken();
+    if (!token) return;
+
+    try {
+      await navigator.clipboard?.writeText(token);
+      setPushStatus("Firebase通知の準備OK。通知トークンをコピーしました。");
+      showToast("通知トークンをコピーしました。Firebaseでテスト送信できます。");
+    } catch {
+      setPushStatus("Firebase通知の準備OK。通知トークンはConsoleに出しました。");
+      showToast("通知トークンをConsoleに出しました。");
+    }
+    console.info("WagaMee FCM token:", token);
   }
 
   function setSignalMood(mood, message, sub) {
@@ -268,6 +300,7 @@ export default function Home() {
         <button className="test-button" type="button" onClick={sendTestNotification}>
           通知を試す
         </button>
+        <span className="push-status">{pushStatus}</span>
       </header>
 
       <main>
@@ -391,7 +424,6 @@ function registerServiceWorker() {
         keys.filter((key) => key.startsWith("wagamee-")).forEach((key) => caches.delete(key));
       });
     }
-    return;
   }
 
   const register = () => {
@@ -402,6 +434,42 @@ function registerServiceWorker() {
     register();
   } else {
     window.addEventListener("load", register, { once: true });
+  }
+}
+
+async function requestFirebaseToken() {
+  try {
+    const supported = await isSupported();
+    if (!supported) {
+      return null;
+    }
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const registration = await navigator.serviceWorker.register(`${basePath}/sw.js`);
+    const messaging = getMessaging(app);
+    return await getToken(messaging, {
+      vapidKey: firebaseVapidKey,
+      serviceWorkerRegistration: registration
+    });
+  } catch (error) {
+    console.error("Failed to get FCM token:", error);
+    return null;
+  }
+}
+
+async function listenForForegroundMessages(showToast) {
+  try {
+    const supported = await isSupported();
+    if (!supported || !firebaseVapidKey) return;
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+    onMessage(messaging, (payload) => {
+      const title = payload.notification?.title || "WagaMee";
+      showToast(title);
+    });
+  } catch (error) {
+    console.warn("Firebase foreground notification listener was not started:", error);
   }
 }
 

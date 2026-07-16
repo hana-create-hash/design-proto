@@ -1,4 +1,15 @@
+importScripts("https://www.gstatic.com/firebasejs/12.16.0/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/12.16.0/firebase-messaging-compat.js");
+
 const CACHE_NAME = "wagamee-pwa-v2";
+const firebaseConfig = {
+  apiKey: "AIzaSyCGAfHdsBIJWZzaWBlvYu4hGUamPgS854I",
+  authDomain: "designe-hana.firebaseapp.com",
+  projectId: "designe-hana",
+  storageBucket: "designe-hana.firebasestorage.app",
+  messagingSenderId: "851897207048",
+  appId: "1:851897207048:web:5cbd5b01b8f59c4f79c4bd"
+};
 const STATIC_ASSETS = [
   "./manifest.webmanifest",
   "./icons/icon.svg",
@@ -12,6 +23,21 @@ const STATIC_ASSETS = [
   "./assets/devil-searching.png",
   "./assets/devil-found.png"
 ];
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  const title = payload.notification?.title || "WagaMee";
+  const options = {
+    body: payload.notification?.body || "小悪魔が呼んでいます。",
+    icon: "./icons/icon.svg",
+    badge: "./icons/icon.svg",
+    data: payload.data || {}
+  };
+
+  self.registration.showNotification(title, options);
+});
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)));
