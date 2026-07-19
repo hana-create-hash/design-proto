@@ -1,7 +1,7 @@
 AGENTS.md
 .agents/
 previous-app/
-assets/
+/assets/
 puppy-character.html
 node_modules/
 .pnpm-store/
