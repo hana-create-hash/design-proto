@@ -106,7 +106,9 @@ export default function Home() {
   const [sniffButtonText, setSniffButtonText] = useState("Try Vibe");
   const [finishTitle, setFinishTitle] = useState("今日はこれで十分!");
   const [finishCopy, setFinishCopy] = useState("前まで行けただけでも、ちゃんと自分の時間。");
-  const [pushStatus, setPushStatus] = useState("Firebase通知はVAPID key設定後に使えます。");
+  const [pushStatus, setPushStatus] = useState(
+    firebaseVapidKey ? "" : "Firebase通知はVAPID key設定後に使えます。"
+  );
   const [toast, setToast] = useState("");
 
   const targetAngleRef = useRef(0);
@@ -300,7 +302,7 @@ export default function Home() {
         <button className="test-button" type="button" onClick={sendTestNotification}>
           通知を試す
         </button>
-        <span className="push-status">{pushStatus}</span>
+        {pushStatus ? <span className="push-status">{pushStatus}</span> : null}
       </header>
 
       <main>
